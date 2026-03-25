@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spendly — Personal Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1 class="brand-name">Spendly</h1>
+        <span class="brand-tag">Personal Finance Tracker</span>
+      </div>
+      <div class="header-right">
+        <span class="current-month" id="current-month"></span>
+        <button class="btn btn-outline" id="clear-btn">Clear All</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Summary Cards ── -->
+  <div class="container">
+    <div class="summary-grid">
+      <div class="summary-card card-income">
+        <span class="card-icon">↑</span>
+        <div class="card-body">
+          <span class="card-label">Total Income</span>
+          <span class="card-amount" id="total-income">KSh 0.00</span>
+        </div>
+      </div>
+      <div class="summary-card card-expense">
+        <span class="card-icon">↓</span>
+        <div class="card-body">
+          <span class="card-label">Total Expenses</span>
+          <span class="card-amount" id="total-expense">KSh 0.00</span>
+        </div>
+      </div>
+      <div class="summary-card card-balance">
+        <span class="card-icon">◈</span>
+        <div class="card-body">
+          <span class="card-label">Net Balance</span>
+          <span class="card-amount" id="net-balance">KSh 0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Progress Bar ── -->
+    <div class="budget-section">
+      <div class="budget-header">
+        <span class="budget-label">Monthly Budget</span>
+        <div class="budget-controls">
+          <span id="budget-used-label">KSh 0 of</span>
+          <input type="number" id="budget-input" class="budget-field" placeholder="Set budget" min="0"/>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span class="budget-hint" id="budget-hint">Set a monthly budget above to track progress</span>
+    </div>
+
+    <!-- ── Main Layout ── -->
+    <div class="main-layout">
+
+      <!-- Add Transaction -->
+      <div class="panel panel-form">
+        <h2 class="panel-title">Add Transaction</h2>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <input type="text" id="desc" class="form-input" placeholder="e.g. Lunch at Java"/>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Amount (KSh)</label>
+            <input type="number" id="amount" class="form-input" placeholder="0.00" min="0" step="0.01"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <div class="type-toggle">
+              <button class="toggle-btn active" id="btn-expense" data-type="expense">Expense</button>
+              <button class="toggle-btn" id="btn-income" data-type="income">Income</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="category" class="form-input">
+              <option value="food">🍽 Food & Dining</option>
+              <option value="transport">🚗 Transport</option>
+              <option value="shopping">🛍 Shopping</option>
+              <option value="bills">💡 Bills & Utilities</option>
+              <option value="health">💊 Health</option>
+              <option value="entertainment">🎬 Entertainment</option>
+              <option value="education">📚 Education</option>
+              <option value="salary">💼 Salary</option>
+              <option value="freelance">💻 Freelance</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" id="date" class="form-input"/>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" id="add-btn">+ Add Transaction</button>
+
+        <!-- Category Breakdown -->
+        <div class="breakdown-section">
+          <h3 class="breakdown-title">By Category</h3>
+          <div id="breakdown-list" class="breakdown-list"></div>
+        </div>
+      </div>
+
+      <!-- Transaction History -->
+      <div class="panel panel-list">
+        <div class="list-header">
+          <h2 class="panel-title">Transactions</h2>
+          <div class="filter-row">
+            <select id="filter-type" class="form-input form-input-sm">
+              <option value="all">All</option>
+              <option value="expense">Expenses</option>
+              <option value="income">Income</option>
+            </select>
+            <select id="filter-cat" class="form-input form-input-sm">
+              <option value="all">All Categories</option>
+              <option value="food">Food</option>
+              <option value="transport">Transport</option>
+              <option value="shopping">Shopping</option>
+              <option value="bills">Bills</option>
+              <option value="health">Health</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="education">Education</option>
+              <option value="salary">Salary</option>
+              <option value="freelance">Freelance</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="transaction-list" class="transaction-list">
+          <div class="empty-state">
+            <span class="empty-icon">📋</span>
+            <p>No transactions yet.</p>
+            <p class="empty-sub">Add one using the form on the left.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Toast ── -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ── Confirm Modal ── -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <p class="modal-msg">Clear all transactions?</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="modal-confirm">Yes, Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
